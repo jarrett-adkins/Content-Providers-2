@@ -1,11 +1,11 @@
-package com.example.admin.customcontentproviderapplication;
+package com.example.admin.customcontentproviderapplication.model;
 
 public class Person {
 
     private String firstName, lastName, address;
     private int age, ssn;
 
-    public Person(String firstName, String lastName, String address, int age, int ssn) {
+    public Person(String firstName, String lastName, int age, String address, int ssn) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;

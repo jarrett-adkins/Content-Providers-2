@@ -10,11 +10,13 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.util.Log;
 
 //manages access to a structured set of data by handling requests from other applications.
 // All methodes except onCreate() must be thread safe.
 public class PersonProvider extends ContentProvider {
 
+    private static final String TAG = "PersonProvider";
     private DatabaseHelper dbHelper;
     private static final UriMatcher URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
 
@@ -26,9 +28,18 @@ public class PersonProvider extends ContentProvider {
     // content://<authority>/<path> for tables, and content://<authority>/<path>/<id> for single rows.
     static {
         // for the entire row
-        URI_MATCHER.addURI( PersonContract.AUTHORITY, "people", 1 );
+        URI_MATCHER.addURI(
+                "com.example.admin.customcontentproviderapplication.provider",
+                "people",
+                1 );
         // for one column
-        URI_MATCHER.addURI( PersonContract.AUTHORITY, "people/#", 2 );
+        URI_MATCHER.addURI(
+                "com.example.admin.customcontentproviderapplication.provider",
+                "people/#",
+                2 );
+    }
+
+    public PersonProvider() {
     }
 
     @Override
@@ -37,6 +48,7 @@ public class PersonProvider extends ContentProvider {
         // creates your provider. Notice that your provider is not created until a ContentResolver
         // object tries to access it.
 
+        Log.d(TAG, "onCreate: ");
         dbHelper = new DatabaseHelper( getContext() );
         return true;
     }
@@ -49,6 +61,7 @@ public class PersonProvider extends ContentProvider {
         // and columns to return, and the sort order of the result. Return the data as a Cursor object.
         // Should throw an exception on fail.
 
+        Log.d(TAG, "query: ");
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
 
@@ -63,7 +76,7 @@ public class PersonProvider extends ContentProvider {
                 // If the incoming URI was for a single row
                 builder.setTables( dbHelper.TABLE_NAME );
                 // limit query to one row at most:
-                builder.appendWhere( selection + " _ID = " + uri.getLastPathSegment());
+                builder.appendWhere( " _ID = " + uri.getLastPathSegment());
                 break;
             default:
                 throw new IllegalArgumentException("Unsupported URI: " + uri);
